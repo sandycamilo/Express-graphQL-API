@@ -13,6 +13,11 @@ const schema = buildSchema(`
   type Weather {
     temperature: Float!
     description: String!
+    feels_like: Float
+    temp_min: Float
+    temp_max: Float
+    pressure: Float
+    humidity: Float
   }
 
   enum Units {
@@ -22,7 +27,7 @@ const schema = buildSchema(`
   }
 
   type Query {
-    getWeather(zip: Int!, units: String!): Weather!
+    getWeather( zip: Int!, units: Units ): Weather!
   }
 `)
 
@@ -35,7 +40,12 @@ const root = {
                 const json = await res.json()
                 const temperature = json.main.temp
                 const description = json.weather[0].description
-                return { temperature, description }
+                const feels_like = json.main.feels_like
+                const temp_min = json.main.temp_min
+                const temp_max = json.main.temp_max
+                const pressure = json.main.pressure
+                const humidity = json.main.humidity
+                return { temperature, description, feels_like, temp_min, temp_max, pressure, humidity }
   }
 }
 

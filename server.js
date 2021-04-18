@@ -22,15 +22,15 @@ const schema = buildSchema(`
   }
 
   type Query {
-    getWeather(zip: Int!): Weather!
+    getWeather(zip: Int!, units: String!): Weather!
   }
 `)
 
 // resolver 
 const root = {
-  getWeather: async ({ zip }) => {
+  getWeather: async ({ zip, units }) => {
                 const apikey = process.env.OPENWEATHERMAP_API_KEY
-                const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}`
+                const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
                 const res = await fetch(url)
                 const json = await res.json()
                 const temperature = json.main.temp
@@ -55,5 +55,5 @@ require('dotenv').config()
 // start this app
 const port = 4000
 app.listen(port, () => {
-  console.log('Running on port:'+port)
+  console.log('Running on port:' + port)
 })

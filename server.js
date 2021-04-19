@@ -11,14 +11,14 @@ const fetch = require('node-fetch')
 // schema
 const schema = buildSchema(`
   type Weather {
-    temperature: Float!
-    description: String!
+    temperature: Float
+    description: String
     feels_like: Float
     temp_min: Float
     temp_max: Float
     pressure: Float
     humidity: Float
-    cod: String!
+    cod: String
     message: String
   }
 
@@ -40,16 +40,24 @@ const root = {
                 const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apikey}&units=${units}`
                 const res = await fetch(url)
                 const json = await res.json()
-                const temperature = json.main.temp
-                const description = json.weather[0].description
-                const feels_like = json.main.feels_like
-                const temp_min = json.main.temp_min
-                const temp_max = json.main.temp_max
-                const pressure = json.main.pressure
-                const humidity = json.main.humidity
                 const cod = json.cod
                 const message = json.message
-                return { temperature, description, feels_like, temp_min, temp_max, pressure, humidity, cod, message }
+                if ( cod != "200") {
+                  return {
+                    cod: cod, 
+                    message: message
+                  }
+                } else {
+                    const temperature = json.main.temp
+                    const description = json.weather[0].description
+                    const feels_like = json.main.feels_like
+                    const temp_min = json.main.temp_min
+                    const temp_max = json.main.temp_max
+                    const pressure = json.main.pressure
+                    const humidity = json.main.humidity
+              
+                    return { cod, message, temperature, description, message, feels_like, temp_min, temp_max, pressure, humidity }
+          }
   }
 }
 
